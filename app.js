@@ -1,20 +1,40 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+// require('dotenv').config()
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const path = require("path");
+const express = require("express");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
-var app = express();
+// const productsRoutes = require("./routes/products");
+// const userRoutes = require("./routes/user");
+// const orderRoutes = require("./routes/order");
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+const app = express();
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+mongoose
+.connect(
+  process.env.DATABASE
+)
+.then(() => {
+  console.log("Connected to database!");
+})
+.catch(() => {
+  console.log("Connection failed!");
+});
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS");
+
+  next();
+});
+
+// app.use("/api/products", productsRoutes);
+// app.use("/api/user", userRoutes);
+// app.use("/api/order", orderRoutes);
 
 module.exports = app;
