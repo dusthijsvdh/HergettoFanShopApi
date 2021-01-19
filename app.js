@@ -1,25 +1,21 @@
-// require('dotenv').config()
+require('dotenv').config()
 
 const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
-// const productsRoutes = require("./routes/products");
-// const userRoutes = require("./routes/user");
+const productsRoutes = require("./routes/products");
+const userRoutes = require("./routes/user");
 // const orderRoutes = require("./routes/order");
 
 const app = express();
 
-mongoose
-.connect(
-  process.env.DATABASE
-)
-.then(() => {
+mongoose.connect(process.env.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
   console.log("Connected to database!");
-})
-.catch(() => {
+}).catch((err) => {
   console.log("Connection failed!");
+  console.log(err)
 });
 
 app.use(bodyParser.json());
@@ -33,8 +29,8 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.use("/api/products", productsRoutes);
-// app.use("/api/user", userRoutes);
+app.use("/api/products", productsRoutes);
+app.use("/api/user", userRoutes);
 // app.use("/api/order", orderRoutes);
 
 module.exports = app;
