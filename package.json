@@ -11,6 +11,7 @@
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
     "express": "~4.16.1",
+    "express-autosanitizer": "^1.0.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.12",
     "mongoose-unique-validator": "^2.0.3",

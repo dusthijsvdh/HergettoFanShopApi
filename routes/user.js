@@ -11,7 +11,7 @@ const checkAuth = require("../middleware/check-auth")
 const router = express.Router();
 
 router.post("/signup", async (req, res, next) => {
-  const {email, password, firstName, lastName, phoneNumber, street, streetNumber, city, postalCode, country } = req.body
+  const {email, password, firstName, lastName, phoneNumber, street, streetNumber, city, postalCode, country } = req.autosan.body
 
   try {
 
@@ -60,14 +60,14 @@ router.post("/signup", async (req, res, next) => {
 router.post("/login", async (req, res, next) => {
   let fetchedUser;
   try {
-    const user = await User.findOne({ email: req.body.email })
+    const user = await User.findOne({ email: req.autosan.body.email })
       if (!user) {
         return res.status(401).json({
           message: "Auth failed"
         });
       }
 
-      const passwordMatches = await bcrypt.compare(req.body.password, user.password)
+      const passwordMatches = await bcrypt.compare(req.autosan.body.password, user.password)
       if(!passwordMatches) {
         return res.status(400).json({
           success: false,
@@ -99,7 +99,7 @@ router.post("/login", async (req, res, next) => {
 })
 
 router.post("/upgrade-to-admin", checkAuth, async (req, res, next) => {
-  const { key } = req.body
+  const { key } = req.autosan.body
   if(!key || key !== process.env.UPGRADE_KEY) return res.status(401).json({ success: false, message: 'The given key is not equal to the upgrade key'})
   try {
     const user = await User.findById(req.user.id)

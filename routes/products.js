@@ -8,13 +8,13 @@ const router = express.Router();
 // router.post("", checkAuth, (req, res, next ) => {
 router.post("", (req, res, next) => {
   const product = new Product({
-    productId: req.body.productId,
-    title: req.body.title,
-    price: req.body.price,
-    description: req.body.description,
-    imageUrl: req.body.imageUrl,
-    sizes: req.body.sizes,
-    colors: req.body.colors,
+    productId: req.autosan.body.productId,
+    title: req.autosan.body.title,
+    price: req.autosan.body.price,
+    description: req.autosan.body.description,
+    imageUrl: req.autosan.body.imageUrl,
+    sizes: req.autosan.body.sizes,
+    colors: req.autosan.body.colors,
   });
   product.save().then(createdProduct => {
     res.status(201).json({
@@ -36,7 +36,10 @@ router.get("", (req, res, next) => {
 router.get("/:id", (req, res, next) => {
   Product.findById(req.params.id).then(product => {
     if (product) {
-      res.status(200).json(product)
+      res.status(200).json({
+        message: 'Product fetched successfully',
+        product: product
+      });
     }
   }).catch(err => {
     res.status(404).json({message: 'Product not found!'});
