@@ -5,6 +5,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const expAutoSan = require('express-autosanitizer');
+const rateLimit = require("express-rate-limit");
 
 const indexRoutes = require("./routes/index")
 const productsRoutes = require("./routes/products");
@@ -12,6 +13,10 @@ const userRoutes = require("./routes/user");
 // const orderRoutes = require("./routes/order");
 
 const app = express();
+const limiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 30
+});
 
 mongoose.connect(process.env.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
   console.log("Connected to database!");
@@ -19,7 +24,7 @@ mongoose.connect(process.env.DATABASE, { useNewUrlParser: true, useUnifiedTopolo
   console.log("Connection failed!");
   console.log(err)
 });
-
+app.use(limiter);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(expAutoSan.all);
