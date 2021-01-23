@@ -21,6 +21,12 @@ router.post("", (req, res, next) => {
       message: 'Product added successfully',
       productId: createdProduct._id
     });
+  }).catch(error => {
+    console.error(error);
+    res.status(401).json({
+      success: false,
+      message: 'Product wasn not added'
+    })
   });
 });
 

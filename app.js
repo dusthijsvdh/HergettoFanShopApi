@@ -10,12 +10,12 @@ const rateLimit = require("express-rate-limit");
 const indexRoutes = require("./routes/index")
 const productsRoutes = require("./routes/products");
 const userRoutes = require("./routes/user");
-// const orderRoutes = require("./routes/order");
+const orderRoutes = require("./routes/order");
 
 const app = express();
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000,
-  max: 30
+  max: 300
 });
 
 mongoose.connect(process.env.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
@@ -40,6 +40,6 @@ app.use((req, res, next) => {
 app.use("/api", indexRoutes)
 app.use("/api/products", productsRoutes);
 app.use("/api/user", userRoutes);
-// app.use("/api/order", orderRoutes);
+app.use("/api/order", orderRoutes);
 
 module.exports = app;

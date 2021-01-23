@@ -60,20 +60,19 @@ router.post("", checkAuth, async (req, res, next ) => {
   try {
     const productDocuments = []
     for (let i = 0; i < orderProducts.length; i++ ) {
-
-      const product = await orderProducts[i];
-        const productOrder = await new ProductOrder({
-          id: product.id,
-          productId: product.productId,
-          title: product.title,
-          price: product.price,
-          description: product.description,
-          imageUrl: product.imageUrl,
-          amount: product.amount
-        });
-        productOrder.save()
-        productDocuments.push(await productOrder)
-      }
+      const item = await orderProducts[i];
+      const productOrder = await new ProductOrder({
+        id: item.product.id,
+        productId: item.product.productId,
+        title: item.product.title,
+        price: item.product.price,
+        description: item.product.description,
+        imageUrl: item.product.imageUrl,
+        amount: item.amount
+      });
+      productOrder.save()
+      productDocuments.push(await productOrder)
+    }
 
       const order = await new Order({
         products: productDocuments,
