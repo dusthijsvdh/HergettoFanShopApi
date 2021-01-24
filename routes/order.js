@@ -63,7 +63,6 @@ router.post("", checkAuth, async (req, res, next ) => {
       const item = await orderProducts[i];
       const productOrder = await new ProductOrder({
         id: item.product.id,
-        productId: item.product.productId,
         title: item.product.title,
         price: item.product.price,
         description: item.product.description,

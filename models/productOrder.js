@@ -5,10 +5,6 @@ const productOrderSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    productId: {
-        type: Number,
-        required: true,
-    },
     title: {
         type: String,
         required: true
