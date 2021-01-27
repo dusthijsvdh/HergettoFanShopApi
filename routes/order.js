@@ -112,7 +112,10 @@ router.patch("/toggledelivery/:id", checkAuth, async (req, res, next ) => {
     })
 
     await order.save()
-    res.json(await order)
+    res.json({
+      success: true,
+      order: await order
+    })
   } catch (e) {
     console.log(e)
     res.send({ success: false, message: 'couldnt update order' })
@@ -140,7 +143,10 @@ router.patch("/togglepaid/:id", checkAuth, async (req, res, next ) => {
     })
 
     await order.save()
-    res.json(await order)
+    res.json({
+      success: true,
+      order: await order
+    })
   } catch (e) {
     console.log(e)
     res.send({ success: false, message: 'couldnt update order' })
