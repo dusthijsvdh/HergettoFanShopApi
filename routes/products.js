@@ -5,29 +5,35 @@ const checkAuth = require("../middleware/check-auth")
 
 const router = express.Router();
 
-// router.post("", checkAuth, (req, res, next ) => {
-router.post("", (req, res, next) => {
-  const product = new Product({
-    productId: req.autosan.body.productId,
-    title: req.autosan.body.title,
-    price: req.autosan.body.price,
-    description: req.autosan.body.description,
-    imageUrl: req.autosan.body.imageUrl,
-    sizes: req.autosan.body.sizes,
-    colors: req.autosan.body.colors,
-  });
-  product.save().then(createdProduct => {
-    res.status(201).json({
-      message: 'Product added successfully',
-      productId: createdProduct._id
+router.post("", checkAuth, (req, res, next ) => {
+  if (req.user.admin) {
+    const product = new Product({
+      productId: req.autosan.body.productId,
+      title: req.autosan.body.title,
+      price: req.autosan.body.price,
+      description: req.autosan.body.description,
+      imageUrl: req.autosan.body.imageUrl,
+      sizes: req.autosan.body.sizes,
+      colors: req.autosan.body.colors,
     });
-  }).catch(error => {
-    console.error(error);
+    product.save().then(createdProduct => {
+      res.status(201).json({
+        message: 'Product added successfully',
+        productId: createdProduct._id
+      });
+    }).catch(error => {
+      console.error(error);
+      res.status(401).json({
+        success: false,
+        message: 'Product wasn not added'
+      })
+    });
+  } else {
     res.status(401).json({
       success: false,
-      message: 'Product wasn not added'
-    })
-  });
+      message: 'Product was not added!'
+    });
+  }
 });
 
 router.get("", (req, res, next) => {
